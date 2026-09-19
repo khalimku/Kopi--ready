@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosen Tamu: Mengelola Desa Wisata | FSRD ISI Surakarta</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Ticket Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- QRCode Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            50: '#fdfbf7',
+                            100: '#f7f1e5',
+                            200: '#efe3d3',
+                            300: '#dfc7ab',
+                            400: '#ca9e7b',
+                            500: '#b87c53',
+                            600: '#9e5f3b',
+                            700: '#7e472f',
+                            800: '#5c3323',
+                            900: '#3d2016',
+                            950: '#23100b',
+                        },
+                        olive: {
+                            50: '#f6f7f2',
+                            100: '#eaede0',
+                            200: '#d5dbc3',
+                            300: '#bac39e',
+                            400: '#9ca778',
+                            500: '#7f8d57',
+                            600: '#647141',
+                            700: '#4c5633',
+                            800: '#3f472d',
+                            900: '#353b27',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .bg-coffee-pattern {
+            background-color: #f7f1e5;
+            background-image: radial-gradient(#7e472f 0.75px, transparent 0.75px), radial-gradient(#7e472f 0.75px, #f7f1e5 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-opacity: 0.05;
+        }
+        
+        .floating-bean {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        .pulse-soft {
+            animation: pulseSoft 3s ease-in-out infinite;
+        }
+        @keyframes pulseSoft {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.9; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(223, 199, 171, 0.4);
+        }
+
+        .glass-card-dark {
+            background: rgba(61, 32, 22, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(190, 124, 83, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-[#f7f1e5] text-coffee-950 font-sans antialiased selection:bg-coffee-300 selection:text-coffee-900 overflow-x-hidden">
+
+    <!-- Top Partner & Institutional Banner -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-coffee-200/60 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+            <div class="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar py-1">
+                <!-- Logos Badge Group -->
+                <div class="flex items-center gap-3 sm:gap-6 min-w-max">
+                    <div class="flex items-center gap-2">
+                        <span class="p-1.5 bg-coffee-100 rounded-lg text-coffee-800 font-extrabold text-xs tracking-wider uppercase border border-coffee-200">
+                            <i class="fa-solid font-bold text-coffee-700 fa-graduation-cap mr-1"></i> ISI SOLO
+                        </span>
+                        <span class="text-xs text-coffee-700 font-semibold hidden md:inline">Fakultas Seni Rupa & Desain</span>
+                    </div>
+                    <div class="h-4 w-px bg-coffee-300"></div>
+                    <div class="flex items-center gap-2 text-xs font-semibold text-coffee-800">
+                        <span class="px-2 py-0.5 bg-olive-100 text-olive-800 rounded-md border border-olive-200">Prodi Destinasi Pariwisata</span>
+                        <span class="px-2 py-0.5 bg-amber-100 text-amber-900 rounded-md border border-amber-200 hidden sm:inline-block">Diktisaintek Berdampak</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Quick Links -->
+                <div class="flex items-center gap-3 ml-auto">
+                    <a href="#speaker" class="text-xs font-semibold text-coffee-800 hover:text-coffee-600 transition">Pembicara</a>
+                    <a href="#rundown" class="text-xs font-semibold text-coffee-800 hover:text-coffee-600 transition">Jadwal</a>
+                    <a href="#lokasi" class="text-xs font-semibold text-coffee-800 hover:text-coffee-600 transition">Lokasi</a>
+                    <a href="#daftar" class="px-3.5 py-1.5 bg-coffee-800 hover:bg-coffee-900 text-white font-medium text-xs rounded-full transition shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-ticket"></i> Daftar Gratis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden pt-8 pb-16 lg:py-20 bg-gradient-to-b from-[#f7f1e5] via-[#efe3d3] to-[#f7f1e5]">
+        <!-- Decorative Coffee Beans & Leaves -->
+        <div class="absolute top-12 left-5 opacity-20 pointer-events-none floating-bean">
+            <i class="fa-solid fa-mug-hot text-7xl text-coffee-800"></i>
+        </div>
+        <div class="absolute bottom-10 right-8 opacity-20 pointer-events-none floating-bean" style="animation-delay: -3s;">
+            <i class="fa-solid fa-seedling text-8xl text-olive-700"></i>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                <!-- Hero Text Column -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <!-- Event Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-coffee-800 text-amber-100 text-xs sm:text-sm font-semibold shadow-md">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                        <i class="fa-solid fa-star text-amber-300"></i> Kuliah Umum & Dosen Tamu
+                    </div>
+
+                    <!-- Main Title Banner -->
+                    <div class="space-y-2">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-coffee-950 tracking-tight leading-none uppercase">
+                            DOSEN <span class="text-coffee-700 underline decoration-amber-500/60 decoration-wavy">TAMU</span>
+                        </h1>
+                        <p class="font-serif italic text-xl sm:text-2xl text-coffee-800 font-semibold pt-1">
+                            "From Village to Global Stage"
+                        </p>
+                    </div>
+
+                    <!-- Subtitle / Topic Description -->
+                    <div class="glass-card p-5 sm:p-6 rounded-2xl shadow-md border border-coffee-300/50">
+                        <p class="text-base sm:text-lg text-coffee-900 leading-relaxed font-medium">
+                            <span class="font-bold text-coffee-950">Mengelola Desa Wisata:</span> dari Masyarakat, Budaya, Bisnis, Branding, hingga Inovasi Berkelanjutan.
+                        </p>
+                        <div class="mt-3 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-semibold text-coffee-800">
+                            <span class="bg-coffee-200/80 px-2.5 py-1 rounded-md"><i class="fa-solid fa-users text-coffee-700 mr-1"></i> Berbasis Komunitas</span>
+                            <span class="bg-olive-200/80 px-2.5 py-1 rounded-md text-olive-900"><i class="fa-solid fa-leaf text-olive-700 mr-1"></i> Kampus Kopi</span>
+                            <span class="bg-amber-200/80 px-2.5 py-1 rounded-md text-amber-950"><i class="fa-solid fa-cow text-amber-800 mr-1"></i> Kampung Susu</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Countdown Timer -->
+                    <div class="space-y-2">
+                        <p class="text-xs uppercase tracking-wider font-bold text-coffee-700">
+                            <i class="fa-regular fa-clock text-amber-600 mr-1"></i> Hitung Mundur Acara:
+                        </p>
+                        <div class="grid grid-cols-4 gap-2 sm:gap-3 max-w-md mx-auto lg:mx-0 text-center">
+                            <div class="bg-coffee-900 text-white p-2.5 sm:p-3 rounded-xl shadow-inner border border-coffee-700">
+                                <span id="cd-days" class="block text-2xl sm:text-3xl font-extrabold text-amber-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-coffee-300 font-medium uppercase">Hari</span>
+                            </div>
+                            <div class="bg-coffee-900 text-white p-2.5 sm:p-3 rounded-xl shadow-inner border border-coffee-700">
+                                <span id="cd-hours" class="block text-2xl sm:text-3xl font-extrabold text-amber-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-coffee-300 font-medium uppercase">Jam</span>
+                            </div>
+                            <div class="bg-coffee-900 text-white p-2.5 sm:p-3 rounded-xl shadow-inner border border-coffee-700">
+                                <span id="cd-mins" class="block text-2xl sm:text-3xl font-extrabold text-amber-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-coffee-300 font-medium uppercase">Menit</span>
+                            </div>
+                            <div class="bg-coffee-900 text-white p-2.5 sm:p-3 rounded-xl shadow-inner border border-coffee-700">
+                                <span id="cd-secs" class="block text-2xl sm:text-3xl font-extrabold text-amber-300">00</span>
+                                <span class="text-[10px] sm:text-xs text-coffee-300 font-medium uppercase">Detik</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                        <a href="#daftar" class="w-full sm:w-auto px-8 py-3.5 bg-coffee-800 hover:bg-coffee-900 text-amber-100 font-bold rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2 text-base">
+                            <i class="fa-solid fa-pen-to-square"></i> Registrasi Peserta Sekarang
+                        </a>
+                        <button onclick="addToCalendar()" class="w-full sm:w-auto px-6 py-3.5 bg-white hover:bg-coffee-100 text-coffee-900 font-semibold rounded-xl shadow border border-coffee-300 transition text-center flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-regular fa-calendar-plus text-coffee-700"></i> Simpan ke Kalender
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Speaker Card Spotlight Column -->
+                <div class="lg:col-span-5 relative">
+                    <!-- Background Glow -->
+                    <div class="absolute -inset-2 bg-gradient-to-r from-coffee-600 to-olive-600 rounded-3xl blur-lg opacity-30 animate-pulse"></div>
+                    
+                    <div class="relative bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-coffee-200">
+                        <!-- Top Badge Banner -->
+                        <div class="bg-gradient-to-r from-coffee-800 to-coffee-900 text-amber-100 px-6 py-3 flex items-center justify-between">
+                            <span class="text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-user-tie text-amber-400"></i> Narasumber Utama
+                            </span>
+                            <span class="bg-olive-600 text-white text-[11px] px-2.5 py-0.5 rounded-full font-medium">Praktisi Desa</span>
+                        </div>
+
+                        <!-- Speaker Avatar & Info -->
+                        <div class="p-6 text-center">
+                            <div class="relative inline-block mb-4">
+                                <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-amber-200 shadow-xl overflow-hidden mx-auto bg-coffee-100 relative group">
+                                    <img src="156548.jpg" alt="Komarudin, ST." class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/400x400/5c3323/ffffff?text=Komarudin,+ST.';">
+                                </div>
+                                <span class="absolute bottom-2 right-2 bg-olive-700 text-white text-xs font-bold px-3 py-1 rounded-full border-2 border-white shadow">
+                                    <i class="fa-solid fa-award mr-1"></i> Inovator
+                                </span>
+                            </div>
+
+                            <h2 class="text-2xl sm:text-3xl font-black text-coffee-950 mb-1">
+                                Komarudin, ST.
+                            </h2>
+                            <p class="text-coffee-700 font-bold text-sm sm:text-base mb-3">
+                                Kepala Desa Banyuanyar Boyolali
+                            </p>
+
+                            <!-- Village Tag Feature -->
+                            <div class="p-3 bg-coffee-50 rounded-xl border border-coffee-200 text-left mb-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="p-2.5 bg-olive-100 text-olive-800 rounded-lg shrink-0">
+                                        <i class="fa-solid fa-mug-saucer text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-coffee-950 uppercase tracking-wide">Desa Wisata Kampus Kopi</h4>
+                                        <p class="text-xs text-coffee-700 font-medium leading-tight">Kampung Susu & Kopi Banyuanyar, Ampel, Boyolali - Jawa Tengah</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Meta Badges -->
+                            <div class="grid grid-cols-2 gap-2 text-left text-xs">
+                                <div class="p-2.5 bg-coffee-100/70 rounded-lg flex items-center gap-2 text-coffee-900 font-semibold">
+                                    <i class="fa-regular fa-calendar-days text-coffee-700 text-sm"></i>
+                                    <span>Selasa, 22 Sep 2026</span>
+                                </div>
+                                <div class="p-2.5 bg-coffee-100/70 rounded-lg flex items-center gap-2 text-coffee-900 font-semibold">
+                                    <i class="fa-regular fa-clock text-coffee-700 text-sm"></i>
+                                    <span>09.00 – 12.00 WIB</span>
+                                </div>
+                                <div class="p-2.5 bg-coffee-100/70 rounded-lg flex items-center gap-2 text-coffee-900 font-semibold col-span-2">
+                                    <i class="fa-solid fa-location-dot text-rose-700 text-sm"></i>
+                                    <span>Ruang Mini Cinema SBSN, ISI Solo</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer perk banner -->
+                        <div class="bg-olive-100/80 px-6 py-2.5 border-t border-olive-200 text-center flex items-center justify-center gap-2 text-xs font-bold text-olive-900">
+                            <i class="fa-solid fa-mug-hot text-coffee-700"></i> Termasuk Coffee Break & Sertifikat Kehadiran
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK INFO STRIP -->
+    <section class="py-8 bg-coffee-900 text-amber-100 border-y border-coffee-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start gap-4 p-2">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-calendar-day"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-coffee-300 font-medium uppercase">Tanggal Pelaksanaan</p>
+                        <p class="text-base font-bold text-white">Selasa, 22 Sep 2026</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center md:justify-start gap-4 p-2">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-coffee-300 font-medium uppercase">Waktu Sesi</p>
+                        <p class="text-base font-bold text-white">09.00 - 12.00 WIB</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center md:justify-start gap-4 p-2">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-coffee-300 font-medium uppercase">Lokasi Acara</p>
+                        <p class="text-base font-bold text-white">Mini Cinema SBSN ISI Solo</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-center md:justify-start gap-4 p-2">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-coffee"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-coffee-300 font-medium uppercase">Fasilitas Tambahan</p>
+                        <p class="text-base font-bold text-white">Free Coffee Break</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TOPICS & LEARNING PILLARS -->
+    <section id="speaker" class="py-16 sm:py-20 bg-coffee-pattern relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-14">
+                <span class="px-3 py-1 bg-olive-100 text-olive-800 rounded-full text-xs font-bold uppercase tracking-widest border border-olive-200">
+                    Materi Pembelajaran
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-coffee-950 mt-3 mb-4">
+                    Apa yang Akan Anda Pelajari?
+                </h2>
+                <p class="text-coffee-800 text-base sm:text-lg">
+                    Studi kasus nyata pengalihan potensi lokal Banyuanyar dari skala desa menuju panggung industri pariwisata berstandar global.
+                </p>
+            </div>
+
+            <!-- Pillars Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pillar 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-coffee-200 hover:shadow-xl transition duration-300 hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-coffee-100 text-coffee-800 flex items-center justify-center text-2xl mb-4 group-hover:bg-coffee-800 group-hover:text-amber-200 transition">
+                        <i class="fa-solid fa-people-roof"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-coffee-950 mb-2">Pemberdayaan Masyarakat</h3>
+                    <p class="text-sm text-coffee-700 leading-relaxed">
+                        Strategi merangkul warga lokal agar berpartisipasi aktif membangun ekosistem desa wisata yang inklusif dan berkelanjutan.
+                    </p>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-coffee-200 hover:shadow-xl transition duration-300 hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-olive-100 text-olive-800 flex items-center justify-center text-2xl mb-4 group-hover:bg-olive-700 group-hover:text-white transition">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-coffee-950 mb-2">Pengembangan Bisnis Lokal</h3>
+                    <p class="text-sm text-coffee-700 leading-relaxed">
+                        Mengolah komoditas lokal susu & kopi menjadi produk bernilai tambah tinggi dan daya tarik wisata unggulan.
+                    </p>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-coffee-200 hover:shadow-xl transition duration-300 hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center text-2xl mb-4 group-hover:bg-amber-700 group-hover:text-white transition">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-coffee-950 mb-2">Branding "Kampus Kopi"</h3>
+                    <p class="text-sm text-coffee-700 leading-relaxed">
+                        Teknik memposisikan identitas destinasi agar memiliki reputasi unik, terpercaya, dan menarik bagi wisatawan nusantara & mancanegara.
+                    </p>
+                </div>
+
+                <!-- Pillar 4 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-coffee-200 hover:shadow-xl transition duration-300 hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-900 flex items-center justify-center text-2xl mb-4 group-hover:bg-rose-800 group-hover:text-white transition">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-coffee-950 mb-2">Inovasi Pariwisata</h3>
+                    <p class="text-sm text-coffee-700 leading-relaxed">
+                        Penerapan ide-ide kreatif dan teknologi terkini dalam tata kelola wahana edukasi, agrowisata, dan amenitas destinasi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE KAMPUS KOPI EXPERIENCE -->
+    <section class="py-16 bg-gradient-to-br from-coffee-900 via-coffee-950 to-coffee-900 text-amber-50 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-bold uppercase tracking-widest border border-amber-500/30">
+                        Mengenal Banyuanyar Boyolali
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-white leading-tight">
+                        Desa Wisata Kampus Kopi <br/>
+                        <span class="text-amber-400 font-serif italic font-normal">(Kampung Susu & Kopi)</span>
+                    </h2>
+                    <p class="text-coffee-200 text-base leading-relaxed">
+                        Terletak di lereng Gunung Merbabu, Banyuanyar sukses memadukan potensi peternakan sapi perah dan perkebunan kopi robusta/arabika menjadi konsep edukasi pariwisata terpadu bernama **"Kampus Kopi"**.
+                    </p>
+
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-olive-600/60 flex items-center justify-center text-amber-300 font-bold shrink-0">1</span>
+                            <p class="text-sm text-coffee-100 font-medium">Edukasi proses pembibitan hingga penyeduhan kopi segar (*Bean to Cup*).</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-olive-600/60 flex items-center justify-center text-amber-300 font-bold shrink-0">2</span>
+                            <p class="text-sm text-coffee-100 font-medium">Pengolahan susu murni menjadi keju, olahan olahan kuliner, & wisata perah.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-full bg-olive-600/60 flex items-center justify-center text-amber-300 font-bold shrink-0">3</span>
+                            <p class="text-sm text-coffee-100 font-medium">Pemberdayaan UMKM lokal dengan standarisasi bisnis modern.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Coffee Flavor Selector Widget -->
+                <div class="lg:col-span-6">
+                    <div class="glass-card-dark p-6 sm:p-8 rounded-3xl shadow-2xl border border-amber-500/20">
+                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-coffee-800">
+                            <div>
+                                <h3 class="text-lg font-bold text-amber-300">Cita Rasa & Keunikan Desa</h3>
+                                <p class="text-xs text-coffee-300">Klik tab untuk mempelajari lebih lanjut</p>
+                            </div>
+                            <i class="fa-solid fa-mug-hot text-amber-400 text-2xl"></i>
+                        </div>
+
+                        <!-- Interactive Tabs -->
+                        <div class="flex gap-2 mb-6 bg-coffee-950/80 p-1.5 rounded-xl border border-coffee-800">
+                            <button onclick="switchTab('kopi')" id="tab-kopi" class="flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-coffee-950 transition">
+                                <i class="fa-solid fa-seedling mr-1"></i> Kampus Kopi
+                            </button>
+                            <button onclick="switchTab('susu')" id="tab-susu" class="flex-1 py-2 text-xs font-bold rounded-lg text-coffee-300 hover:text-white transition">
+                                <i class="fa-solid fa-cow mr-1"></i> Kampung Susu
+                            </button>
+                            <button onclick="switchTab('inovasi')" id="tab-inovasi" class="flex-1 py-2 text-xs font-bold rounded-lg text-coffee-300 hover:text-white transition">
+                                <i class="fa-solid fa-chart-line mr-1"></i> Model Bisnis
+                            </button>
+                        </div>
+
+                        <!-- Tab Content Boxes -->
+                        <div id="content-kopi" class="space-y-3">
+                            <div class="p-4 bg-coffee-900/60 rounded-xl border border-coffee-800">
+                                <h4 class="text-amber-400 font-bold text-sm mb-1">Aroma Kopi Pegunungan Boyolali</h4>
+                                <p class="text-xs text-coffee-200 leading-relaxed">
+                                    Memiliki profil rasa khas yang seimbang dengan body mantap dan aroma floral herbal dari ketinggian lereng Merbabu.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-coffee-300">
+                                <div class="p-2.5 bg-coffee-900/40 rounded-lg"><strong>Varietas:</strong> Robusta & Arabika</div>
+                                <div class="p-2.5 bg-coffee-900/40 rounded-lg"><strong>Metode:</strong> Natural & Honey Process</div>
+                            </div>
+                        </div>
+
+                        <div id="content-susu" class="space-y-3 hidden">
+                            <div class="p-4 bg-coffee-900/60 rounded-xl border border-coffee-800">
+                                <h4 class="text-amber-400 font-bold text-sm mb-1">Integrasi Sektor Peternakan Murni</h4>
+                                <p class="text-xs text-coffee-200 leading-relaxed">
+                                    Pengembangan susu segar hasil peternak lokal yang dipadukan langsung dengan racikan olahan kopi espresso base.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-coffee-300">
+                                <div class="p-2.5 bg-coffee-900/40 rounded-lg"><strong>Produk:</strong> Susu Segar, Keju, Yogurt</div>
+                                <div class="p-2.5 bg-coffee-900/40 rounded-lg"><strong>Atraksi:</strong> Edukasi Perah Milking</div>
+                            </div>
+                        </div>
+
+                        <div id="content-inovasi" class="space-y-3 hidden">
+                            <div class="p-4 bg-coffee-900/60 rounded-xl border border-coffee-800">
+                                <h4 class="text-amber-400 font-bold text-sm mb-1">Branding "Village to Global"</h4>
+                                <p class="text-xs text-coffee-200 leading-relaxed">
+                                    Transformasi kepemimpinan desa berbasis teknologi, pemasaran digital, dan kemitraan perguruan tinggi (ISI Solo).
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs text-coffee-300">
+                                <div class="p-2.5 bg-coffee-900/40 rounded-lg"><strong>Tipe:</strong> BUMDes & Pokdarwis</div>
+                                <div class="p-2.5 bg-coffee-900/40 rounded-lg"><strong>Fokus:</strong> Sustainable Tourism</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- RUNDOWN / EVENT SCHEDULE -->
+    <section id="rundown" class="py-16 sm:py-20 bg-[#efe3d3]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="px-3 py-1 bg-coffee-200 text-coffee-900 rounded-full text-xs font-bold uppercase tracking-widest border border-coffee-300">
+                    Susunan Acara
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-coffee-950 mt-3">
+                    Rundown Kegiatan Dosen Tamu
+                </h2>
+                <p class="text-xs sm:text-sm text-coffee-700 mt-2">Selasa, 22 September 2026 • 09.00 - 12.00 WIB</p>
+            </div>
+
+            <!-- Timeline Stack -->
+            <div class="space-y-4">
+                <!-- Item 1 -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-coffee-200 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="px-4 py-2 bg-coffee-100 text-coffee-900 font-bold text-sm rounded-xl shrink-0 border border-coffee-200">
+                        <i class="fa-regular fa-clock mr-1 text-coffee-700"></i> 08.30 – 09.00
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-coffee-950 text-base">Registrasi Peserta & Check-In Digital</h4>
+                        <p class="text-xs text-coffee-700">Absensi kehadiran di lobby Mini Cinema SBSN & pembagian kit seminar.</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">Persiapan</span>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-coffee-200 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="px-4 py-2 bg-coffee-100 text-coffee-900 font-bold text-sm rounded-xl shrink-0 border border-coffee-200">
+                        <i class="fa-regular fa-clock mr-1 text-coffee-700"></i> 09.00 – 09.15
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-coffee-950 text-base">Pembukaan & Sambutan Kaprodi Destinasi Pariwisata</h4>
+                        <p class="text-xs text-coffee-700">Pembukaan resmi oleh pimpinan Fakultas Seni Rupa dan Desain (FSRD ISI Solo).</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-amber-100 text-amber-900 text-xs rounded-full font-medium">Opening</span>
+                </div>
+
+                <!-- Item 3 (Main) -->
+                <div class="bg-gradient-to-r from-coffee-800 to-coffee-900 text-amber-100 p-5 rounded-2xl shadow-md border-2 border-amber-400/40 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="px-4 py-2 bg-amber-400 text-coffee-950 font-black text-sm rounded-xl shrink-0 shadow">
+                        <i class="fa-solid fa-circle-play mr-1"></i> 09.15 – 11.00
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-black text-white text-lg">Sesi Dosen Tamu: Komarudin, ST.</h4>
+                        <p class="text-xs text-amber-200 mt-1">
+                            Pemaparan materi "From Village to Global Stage: Mengelola Desa Wisata Banyuanyar".
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 bg-amber-500/30 text-amber-200 text-xs rounded-full font-bold border border-amber-400/30">Sesi Utama</span>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-coffee-200 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="px-4 py-2 bg-coffee-100 text-coffee-900 font-bold text-sm rounded-xl shrink-0 border border-coffee-200">
+                        <i class="fa-regular fa-clock mr-1 text-coffee-700"></i> 11.00 – 11.45
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-coffee-950 text-base">Diskusi Interaktif & Tanya Jawab (Q&A)</h4>
+                        <p class="text-xs text-coffee-700">Sesi dialog terbuka antara mahasiswa/dosen dengan narasumber.</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-olive-100 text-olive-800 text-xs rounded-full font-medium">Diskusi</span>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-coffee-200 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="px-4 py-2 bg-olive-700 text-white font-bold text-sm rounded-xl shrink-0">
+                        <i class="fa-solid fa-mug-hot mr-1"></i> 11.45 – 12.00
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-coffee-950 text-base">Penutupan & Networking Coffee Break</h4>
+                        <p class="text-xs text-coffee-700">Penyerahan cenderamata, foto bersama, dan pencicipan Kopi Banyuanyar.</p>
+                    </div>
+                    <span class="px-2.5 py-1 bg-olive-100 text-olive-900 text-xs rounded-full font-bold">Coffee Break</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATION & VENUE SECTION -->
+    <section id="lokasi" class="py-16 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                <div class="lg:col-span-5 space-y-5">
+                    <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-bold uppercase tracking-widest border border-rose-200">
+                        Lokasi Acara
+                    </span>
+                    <h2 class="text-3xl font-black text-coffee-950">
+                        Ruang Mini Cinema SBSN
+                    </h2>
+                    <p class="text-coffee-700 text-sm sm:text-base leading-relaxed">
+                        Gedung Surat Berharga Syariah Negara (SBSN), Kampus FSRD Institut Seni Indonesia Surakarta (ISI Solo).
+                    </p>
+
+                    <div class="space-y-3 pt-2 text-sm text-coffee-900">
+                        <div class="flex items-start gap-3 p-3 bg-coffee-50 rounded-xl border border-coffee-200">
+                            <i class="fa-solid fa-map-pin text-rose-600 text-lg mt-0.5"></i>
+                            <div>
+                                <strong class="block text-coffee-950">Alamat Kampus:</strong>
+                                <span class="text-xs text-coffee-700">Jl. Ki Hajar Dewantara No.19, Kentingan, Jebres, Surakarta, Jawa Tengah 57126</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 p-3 bg-coffee-50 rounded-xl border border-coffee-200">
+                            <i class="fa-solid fa-chair text-coffee-700 text-lg mt-0.5"></i>
+                            <div>
+                                <strong class="block text-coffee-950">Kapasitas Ruangan:</strong>
+                                <span class="text-xs text-coffee-700">Terbatas untuk 120 Peserta (Mahasiswa ISI Solo & Umum)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Venue Visual Map Representation Card -->
+                <div class="lg:col-span-7">
+                    <div class="bg-gradient-to-br from-coffee-100 to-coffee-200 p-6 sm:p-8 rounded-3xl border-2 border-coffee-300 text-center relative overflow-hidden shadow-lg">
+                        <div class="w-16 h-16 rounded-full bg-coffee-800 text-amber-200 flex items-center justify-center text-2xl mx-auto mb-4 shadow">
+                            <i class="fa-solid fa-film"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-coffee-950 mb-1">Ruang Mini Cinema SBSN</h3>
+                        <p class="text-xs text-coffee-800 mb-6">Fakultas Seni Rupa dan Desain - ISI Surakarta</p>
+
+                        <div class="grid grid-cols-3 gap-3 text-left max-w-lg mx-auto mb-6">
+                            <div class="p-3 bg-white/80 backdrop-blur rounded-xl border border-coffee-300/60 text-center">
+                                <i class="fa-solid fa-snowflake text-sky-600 text-lg mb-1 block"></i>
+                                <span class="text-[11px] font-bold text-coffee-900">Ruangan AC</span>
+                            </div>
+                            <div class="p-3 bg-white/80 backdrop-blur rounded-xl border border-coffee-300/60 text-center">
+                                <i class="fa-solid fa-wifi text-emerald-600 text-lg mb-1 block"></i>
+                                <span class="text-[11px] font-bold text-coffee-900">Free Wi-Fi</span>
+                            </div>
+                            <div class="p-3 bg-white/80 backdrop-blur rounded-xl border border-coffee-300/60 text-center">
+                                <i class="fa-solid fa-square-parking text-indigo-600 text-lg mb-1 block"></i>
+                                <span class="text-[11px] font-bold text-coffee-900">Parkir Luas</span>
+                            </div>
+                        </div>
+
+                        <a href="https://maps.google.com/?q=ISI+Surakarta" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-2.5 bg-coffee-800 hover:bg-coffee-900 text-amber-100 text-xs font-bold rounded-xl shadow transition">
+                            <i class="fa-solid fa-diamond-turn-right"></i> Buka Petunjuk Arah di Google Maps
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- REGISTRATION FORM SECTION -->
+    <section id="daftar" class="py-16 sm:py-20 bg-coffee-900 text-amber-50 relative">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-xs font-bold uppercase tracking-widest border border-amber-500/30">
+                    Pendaftaran Peserta
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-white mt-3">
+                    Amankan Kursi Anda Sekarang
+                </h2>
+                <p class="text-coffee-300 text-sm mt-2">
+                    Gratis! Tempat terbatas. Dapatkan tiket digital setelah mengisi formulir di bawah ini.
+                </p>
+            </div>
+
+            <div class="glass-card-dark p-6 sm:p-10 rounded-3xl shadow-2xl border border-amber-500/30">
+                <form id="rsvpForm" onsubmit="handleRegistration(event)" class="space-y-5">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-amber-300 uppercase mb-1">Nama Lengkap *</label>
+                        <input type="text" id="regName" required placeholder="Contoh: Budi Santoso, S.Des." class="w-full px-4 py-3 bg-coffee-950/80 border border-coffee-700 rounded-xl text-white placeholder-coffee-500 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 uppercase mb-1">Kategori Peserta *</label>
+                            <select id="regRole" required class="w-full px-4 py-3 bg-coffee-950/80 border border-coffee-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-400 transition">
+                                <option value="Mahasiswa ISI Solo">Mahasiswa ISI Solo</option>
+                                <option value="Dosen / Akademisi">Dosen / Akademisi</option>
+                                <option value="Praktisi Pariwisata">Praktisi Pariwisata</option>
+                                <option value="Masyarakat Umum">Masyarakat Umum</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 uppercase mb-1">NIM / Instansi *</label>
+                            <input type="text" id="regInstitution" required placeholder="Contoh: 21105151 / FSRD ISI" class="w-full px-4 py-3 bg-coffee-950/80 border border-coffee-700 rounded-xl text-white placeholder-coffee-500 text-sm focus:outline-none focus:border-amber-400 transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 uppercase mb-1">Email *</label>
+                            <input type="email" id="regEmail" required placeholder="nama@email.com" class="w-full px-4 py-3 bg-coffee-950/80 border border-coffee-700 rounded-xl text-white placeholder-coffee-500 text-sm focus:outline-none focus:border-amber-400 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-300 uppercase mb-1">Nomor WhatsApp *</label>
+                            <input type="tel" id="regPhone" required placeholder="081234567890" class="w-full px-4 py-3 bg-coffee-950/80 border border-coffee-700 rounded-xl text-white placeholder-coffee-500 text-sm focus:outline-none focus:border-amber-400 transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-amber-300 uppercase mb-1">Pertanyaan untuk Pembicara (Opsional)</label>
+                        <textarea id="regQuestion" rows="2" placeholder="Tuliskan hal yang ingin Anda tanyakan mengenai Desa Wisata Banyuanyar..." class="w-full px-4 py-2.5 bg-coffee-950/80 border border-coffee-700 rounded-xl text-white placeholder-coffee-500 text-sm focus:outline-none focus:border-amber-400 transition"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-coffee-950 font-extrabold text-base rounded-xl shadow-xl transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-ticket"></i> Dapatkan Tiket Digital Saja
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIGITAL PASS / E-TICKET MODAL -->
+    <div id="ticketModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white text-coffee-950 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-300 my-8 relative">
+            
+            <!-- Modal Header Badge -->
+            <div class="bg-coffee-900 text-amber-100 p-5 text-center relative">
+                <button onclick="closeTicketModal()" class="absolute top-4 right-4 text-coffee-300 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span class="px-2.5 py-0.5 bg-emerald-600 text-white rounded-full text-[10px] font-extrabold uppercase tracking-widest inline-block mb-1">
+                    <i class="fa-solid fa-check-circle mr-1"></i> Pendaftaran Berhasil
+                </span>
+                <h3 class="text-xl font-black text-amber-300">E-TICKET DESA WISATA</h3>
+                <p class="text-xs text-coffee-300">Dosen Tamu ISI Surakarta 2026</p>
+            </div>
+
+            <!-- Ticket Body Card -->
+            <div class="p-6 space-y-4 bg-gradient-to-b from-coffee-50 to-white">
+                
+                <div class="text-center pb-4 border-b border-dashed border-coffee-300">
+                    <p class="text-xs text-coffee-600 uppercase font-bold tracking-wider">Nama Peserta</p>
+                    <h4 id="ticketName" class="text-xl font-black text-coffee-950">Nama Peserta</h4>
+                    <p id="ticketRoleInst" class="text-xs text-coffee-700 font-semibold">Mahasiswa - ISI Surakarta</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs bg-coffee-100/60 p-3 rounded-xl border border-coffee-200">
+                    <div>
+                        <span class="text-coffee-600 block text-[10px] uppercase font-bold">Tanggal</span>
+                        <strong class="text-coffee-950 font-bold">Selasa, 22 Sep 2026</strong>
+                    </div>
+                    <div>
+                        <span class="text-coffee-600 block text-[10px] uppercase font-bold">Waktu</span>
+                        <strong class="text-coffee-950 font-bold">09.00 - 12.00 WIB</strong>
+                    </div>
+                    <div class="col-span-2">
+                        <span class="text-coffee-600 block text-[10px] uppercase font-bold">Lokasi</span>
+                        <strong class="text-coffee-950 font-bold">Ruang Mini Cinema SBSN, ISI Solo</strong>
+                    </div>
+                </div>
+
+                <!-- Generated QR Code Container -->
+                <div class="text-center py-2">
+                    <div id="qrcode" class="flex justify-center mb-2"></div>
+                    <p id="ticketID" class="text-[11px] font-mono text-coffee-600 font-bold tracking-wider">PASS-2026-0001</p>
+                    <p class="text-[10px] text-coffee-500 italic">Tunjukkan QR Code ini saat registrasi di lokasi acara</p>
+                </div>
+
+                <!-- Modal Actions -->
+                <div class="pt-2 flex flex-col gap-2">
+                    <button onclick="window.print()" class="w-full py-2.5 bg-coffee-800 hover:bg-coffee-900 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-print"></i> Cetak / Simpan PDF Tiket
+                    </button>
+                    <button onclick="closeTicketModal()" class="w-full py-2 bg-coffee-100 hover:bg-coffee-200 text-coffee-800 font-semibold text-xs rounded-xl">
+                        Tutup
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER & ORGANIZER LOGOS -->
+    <footer class="bg-coffee-950 text-coffee-400 py-12 border-t border-coffee-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            
+            <div class="space-y-2">
+                <p class="text-xs font-bold text-amber-400 uppercase tracking-widest">Penyelenggara & Mitra Program</p>
+                <div class="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-coffee-200">
+                    <span class="px-3 py-1 bg-coffee-900 rounded-lg border border-coffee-800">ISI Surakarta</span>
+                    <span class="px-3 py-1 bg-coffee-900 rounded-lg border border-coffee-800">Fakultas Seni Rupa dan Desain</span>
+                    <span class="px-3 py-1 bg-coffee-900 rounded-lg border border-coffee-800">Prodi Destinasi Pariwisata</span>
+                    <span class="px-3 py-1 bg-coffee-900 rounded-lg border border-coffee-800">Desa Wisata Banyuanyar Boyolali</span>
+                </div>
+            </div>
+
+            <div class="h-px bg-coffee-900 max-w-xs mx-auto"></div>
+
+            <p class="text-xs text-coffee-500">
+                &copy; 2026 Destinasi Pariwisata ISI Surakarta. All Rights Reserved. <br>
+                Event Dosen Tamu: "From Village to Global Stage".
+            </p>
+
+        </div>
+    </footer>
+
+    <script>
+        // Set event target date: September 22, 2026 09:00:00 WIB
+        const eventDate = new Date("September 22, 2026 09:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById("cd-days").innerText = "00";
+                document.getElementById("cd-hours").innerText = "00";
+                document.getElementById("cd-mins").innerText = "00";
+                document.getElementById("cd-secs").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("cd-hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("cd-mins").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("cd-secs").innerText = seconds.toString().padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Switch Tab Function
+        function switchTab(tab) {
+            const tabs = ['kopi', 'susu', 'inovasi'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const content = document.getElementById(`content-${t}`);
+                if (t === tab) {
+                    btn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-amber-500 text-coffee-950 transition";
+                    content.classList.remove('hidden');
+                } else {
+                    btn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-coffee-300 hover:text-white transition";
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        // Add to Google Calendar Logic
+        function addToCalendar() {
+            const title = encodeURIComponent("Dosen Tamu: Mengelola Desa Wisata Banyuanyar");
+            const details = encodeURIComponent("Dosen Tamu bersama Komarudin, ST. (Kepala Desa Banyuanyar Boyolali) tentang pengelolaan desa wisata Kampus Kopi.");
+            const location = encodeURIComponent("Ruang Mini Cinema SBSN, FSRD ISI Surakarta");
+            const startDate = "20260922T020000Z"; // 09:00 WIB in UTC
+            const endDate = "20260922T050000Z";   // 12:00 WIB in UTC
+
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}`;
+            window.open(calendarUrl, '_blank');
+        }
+
+        // Registration Form Submission and E-Ticket Generation
+        function handleRegistration(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value;
+            const role = document.getElementById('regRole').value;
+            const inst = document.getElementById('regInstitution').value;
+            
+            // Populate Ticket Modal
+            document.getElementById('ticketName').innerText = name;
+            document.getElementById('ticketRoleInst').innerText = `${role} • ${inst}`;
+            
+            const randomCode = 'PASS-2026-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('ticketID').innerText = randomCode;
+
+            // Generate QR Code inside modal
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: `DosenTamu2026|${name}|${randomCode}`,
+                width: 130,
+                height: 130,
+                colorDark : "#3d2016",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // Show Modal
+            const modal = document.getElementById('ticketModal');
+            modal.classList.remove('hidden');
+
+            // Trigger Confetti Celebration Effect
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ca9e7b', '#7e472f', '#7f8d57', '#fbbf24']
+            });
+        }
+
+        function closeTicketModal() {
+            document.getElementById('ticketModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
